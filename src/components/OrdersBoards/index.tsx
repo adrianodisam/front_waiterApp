@@ -1,41 +1,37 @@
 import React from 'react';
-import { order } from '../../types/types';
+import { Order } from '../../types/Order';
 import { OrderModal } from '../OrderModal';
 import { Board, OrdersContainer } from './styles';
 interface OrdersBoardsProps{
   icon:string;
   title :string;
-  orders : order[]
+  orders :Order[]
 }
 export function OrdersBoards({icon,title,orders}:OrdersBoardsProps)
 {
   const [isModalVisibled ,setisModalVisibled] = React.useState(false);
-  function handleOpenModal(){
+  const [selectOrder ,setselectOrder] = React.useState<null|Order>(null);
+  function handleOpenModal(order: Order){
     setisModalVisibled(true);
+    setselectOrder(order);
 
   }
   return(
     <Board>
-      <OrderModal visible= {isModalVisibled}/>
+      <OrderModal visible= {isModalVisibled} order={selectOrder}/>
       <header>
         <span>{icon}</span>
         <strong>{title}</strong>
         <strong>{orders.length}</strong>
       </header>
-      {/* {orders.length > 0 &&   <OrdersContainer>
+      {orders.length > 0 &&   <OrdersContainer>
         {orders.map((orderAtt)=>(
-          <button type='button' key={orderAtt._id}>
+          <button type='button' key={orderAtt._id} onClick={()=>handleOpenModal(orderAtt)}>
             <strong>Mesa :{orderAtt.table}</strong>
-            <span>{orderAtt.products.product.length}</span>
+            <span>{orderAtt.products.length}</span>
           </button>
         ))}
-      </OrdersContainer> } */}
-      <OrdersContainer>
-        <button type='button' onClick={handleOpenModal}>
-          <strong>Mesa 2</strong>
-          <span>2 itens</span>
-        </button>
-      </OrdersContainer>
+      </OrdersContainer> }
     </Board>
   );
 }
