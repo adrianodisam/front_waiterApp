@@ -1,3 +1,4 @@
+
 import { Order } from '../../types/Order';
 import { OrdersBoards } from '../OrdersBoards';
 import {  Container } from './styles';
@@ -56,7 +57,7 @@ const orders:Order[] = [
   }, {
     '_id': '655acb34de7c1039486eb339',
     'table': '2',
-    'status': 'DONE',
+    'status': 'WATING',
     'products': [
       {
         'product': {
@@ -81,7 +82,7 @@ const orders:Order[] = [
   }, {
     '_id': '655pcb34de7c1ap9486eb339',
     'table': '3',
-    'status': 'DONE',
+    'status': 'IN_PRODUCTION',
     'products': [
       {
         'product': {
@@ -155,13 +156,17 @@ const orders:Order[] = [
     ],
   }
 ];
+const ordersEspera : Order[] =orders.filter(orderesp =>(orderesp.status === 'WATING'));
+const orderspreparation : Order[] =orders.filter(orderesp =>(orderesp.status === 'IN_PRODUCTION'));
+const ordersready : Order[] =orders.filter(orderesp =>(orderesp.status === 'DONE'));
 
 export function Orders(){
   return(
     <Container>
-      <OrdersBoards icon='🕒' title = 'Fila de Espera' orders ={orders}/>
-      <OrdersBoards  icon="👨‍🍳" title = 'Em Preparação' orders={[]}/>
-      <OrdersBoards  icon="✔" title = "Pronto" orders={[]}/>
+      <OrdersBoards icon='🕒' title = 'Fila de Espera' orders ={ordersEspera}/>
+      <OrdersBoards  icon="👨‍🍳" title = 'Em Preparação' orders={orderspreparation}/>
+      <OrdersBoards  icon="✔" title = "Pronto" orders={ordersready}/>
+
     </Container>
   );
 }
