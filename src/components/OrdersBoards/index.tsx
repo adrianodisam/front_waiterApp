@@ -5,7 +5,7 @@ import { Board, OrdersContainer } from './styles';
 interface OrdersBoardsProps{
   icon:string;
   title :string;
-  orders :Order[]
+  orders :Order[];
 }
 export function OrdersBoards({icon,title,orders}:OrdersBoardsProps)
 {
@@ -16,9 +16,13 @@ export function OrdersBoards({icon,title,orders}:OrdersBoardsProps)
     setselectOrder(order);
 
   }
+  function handleCloseModal(){
+    setisModalVisibled(false);
+    setselectOrder(null);
+  }
   return(
     <Board>
-      <OrderModal visible= {isModalVisibled} order={selectOrder}/>
+      <OrderModal visible= {isModalVisibled} order={selectOrder} onclose={handleCloseModal}/>
       <header>
         <span>{icon}</span>
         <strong>{title}</strong>
