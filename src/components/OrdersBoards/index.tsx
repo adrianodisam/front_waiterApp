@@ -29,6 +29,7 @@ export function OrdersBoards({icon,title,orders,
   async function handleChangeStatus(){
     setisLoading(true);
     const status = selectOrder?.status ==='WATING' ? 'IN_PRODUCTION' :'DONE';
+    await api.patch(`/orders/${selectOrder?._id }`,{status});
     toast.success(`O pedido da mesa ${selectOrder?.table} teve o  status alterado`);
     setisLoading(false);
     setisModalVisibled(false);

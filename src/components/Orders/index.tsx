@@ -4,14 +4,25 @@ import { Order } from '../../types/Order';
 import { OrdersBoards } from '../OrdersBoards';
 import {  Container } from './styles';
 import { api } from '../../utils/api';
+import socketIo from  'socket.io-client';
 
 export function Orders(){
   const [orders ,setorders] = React.useState <Order[]>([]);
   useEffect(() => {
+    const socket = socketIo('http://127.0.0.1:3001',{
+      transports : ['websocket'],
+    });
+    socket.on('order@new',(order)=>{
+      // setorders(prevState => prevState.concat(order));
+      setorders(preveState=> preveState.concat(order));
+    });
+  }, []);
+  useEffect(() => {
     api.get('/orders').then(({data})=>{
       setorders(data);
     });
-  }, []);
+  }, [orders]);
+
   const ordersEspera : Order[] =orders.filter(orderesp =>(orderesp.status === 'WATING'));
   const orderspreparation : Order[] =orders.filter(orderesp =>(orderesp.status === 'IN_PRODUCTION'));
   const ordersready : Order[] =orders.filter(orderesp =>(orderesp.status === 'DONE'));
