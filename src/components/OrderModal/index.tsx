@@ -1,5 +1,5 @@
 import closeIcon from '../../assets/images/close-icon.svg';
-import { formatCurrency } from '../../format/formatCurrency';
+import { formatCurrency } from '../../utils/formatCurrency';
 import { Order } from '../../types/Order';
 import { Actions, ModalBody, OrderDetails, OverLay } from './styles';
 
@@ -7,8 +7,11 @@ interface OrderModalProps{
   visible: boolean,
   order : Order | null;
   onclose : ()=> void;
+  onCancelOrder :()=> Promise<void>;
+  isLoading :boolean;
+  OnchangeOrderStatus : ()=> Promise<void>;
 }
-export function OrderModal({visible,order,onclose}:OrderModalProps){
+export function OrderModal({visible,order,onclose,onCancelOrder,isLoading,OnchangeOrderStatus}:OrderModalProps){
   if(!visible ||!order){
     return null;
   }
@@ -59,11 +62,20 @@ export function OrderModal({visible,order,onclose}:OrderModalProps){
           </div>
         </OrderDetails>
         <Actions>
-          <button type='button' className='primary'>
-            <span>👨‍🍳</span>
-            <strong>Iniciar Produção</strong>
-          </button>
-          <button type='button'className='secondary'>
+          {order.status !== 'DONE' && (
+            <button type='button' className='primary' disabled= {isLoading} onClick={OnchangeOrderStatus}>
+              <span>
+                {order.status ==='WATING' && '👨‍🍳'}
+                {order.status ==='IN_PRODUCTION' && '✔'}
+              </span>
+              <strong>
+                {order.status ==='WATING' && 'Iniciar Produção'}
+                {order.status ==='IN_PRODUCTION' && 'Concluir Pedido'}
+              </strong>
+            </button>
+          )}
+
+          <button type='button'className='secondary' onClick={onCancelOrder}disabled= {isLoading}>
             Cancelar Pedido
           </button>
         </Actions>
